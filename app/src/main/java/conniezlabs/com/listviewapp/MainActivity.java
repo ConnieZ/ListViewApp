@@ -2,6 +2,8 @@ package conniezlabs.com.listviewapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
             // ListView listView = getListView();
 
-            // the following to lines are replacements for commented out code
+            // the following two lines are replacements for commented out code
             listView = (ListView) findViewById(R.id.listView);
             listView.setAdapter(adapter);
 
@@ -39,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        }
+
+
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            MenuInflater inflater = getMenuInflater();
+            // this adds the ToolBar on top of the app with menu items from options_menu.xml
+            inflater.inflate(R.menu.options_menu, menu);
+            return true;
         }
 
 }
