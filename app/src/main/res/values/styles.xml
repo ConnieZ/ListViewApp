@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Item Row Style -->
+    <style name="ItemRow" >
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">5dip</item>
+    </style>
+
 </resources>

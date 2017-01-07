@@ -2,8 +2,10 @@ package conniezlabs.com.listviewapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,11 +14,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+        private static final String TAG = "MainActivity";
+
         static final String[] WHITE_WINES = new String[] { "Pinot Blanc", "Pinot Grigio", "Sauvignon Blanc",
-                "Chardonnay", "White Rioja", "Muscat Blanc", "Riesling","Tokaji" };
+                    "Chardonnay", "White Rioja", "Muscat Blanc", "Riesling","Tokaji" };
         ListView listView;
+
+
+        private static final int INSERT_ID = Menu.FIRST;
+        private static final int SHOP_LIST_ID = Menu.NONE;
+
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
+            Log.e(TAG, "entered onCreate");
+
             super.onCreate(savedInstanceState);
 
             setContentView(R.layout.activity_main);
@@ -40,16 +53,34 @@ public class MainActivity extends AppCompatActivity {
                             ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
                 }
             });
+            Log.e(TAG, "onCreate success");
 
         }
 
 
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
+            Log.e(TAG, "entered onCreateOptionsMenu");
             MenuInflater inflater = getMenuInflater();
             // this adds the ToolBar on top of the app with menu items from options_menu.xml
             inflater.inflate(R.menu.options_menu, menu);
+            menu.add(0, INSERT_ID, 0, R.string.menu_insert);
+            //new menu option to pull up the Shopping List
+            menu.add(0, SHOP_LIST_ID, 0, R.string.shop_list);
+            Log.e(TAG, "finished onCreateOptionsMenu");
+
+
             return true;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            if(item.getTitle().equals("Search")) {
+                Toast.makeText(getApplicationContext(), "Search = "+onSearchRequested(), Toast.LENGTH_LONG).show();
+                return onSearchRequested();
+            } else {
+                return false;
+            }
         }
 
 }

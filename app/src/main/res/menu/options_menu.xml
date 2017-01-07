@@ -6,4 +6,9 @@
         android:icon="@android:drawable/ic_menu_search"
         yourapp:showAsAction="collapseActionView|ifRoom"
         yourapp:actionViewClass="android.widget.SearchView" />
+    <item android:id="@+id/add_new"
+        android:title="@string/menu_insert"
+        android:icon="@android:drawable/ic_menu_add"
+        yourapp:showAsAction="collapseActionView|ifRoom"
+        yourapp:actionViewClass="android.widget.EditText" />
 </menu>
