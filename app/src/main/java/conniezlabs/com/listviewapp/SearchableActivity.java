@@ -2,6 +2,7 @@ package conniezlabs.com.listviewapp;
 // this file used the following sources:
 // http://www.androiddesignpatterns.com/2012/07/understanding-loadermanager.html
 // https://developer.android.com/training/search/index.html
+// https://inducesmile.com/android/android-search-dialog-implementation-example/
 
 import android.app.ListActivity;
 import android.app.LoaderManager;
@@ -18,9 +19,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class SearchableActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -38,13 +42,15 @@ public class SearchableActivity extends ListActivity implements LoaderManager.Lo
     // The adapter that binds our data to the ListView
     private SimpleCursorAdapter mAdapter;
 
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "Started Searchable onCreate");
 
         // The following is for Search Functionality
         handleIntent(getIntent());
+
+        // for testing only
+        setContentView(R.layout.search_layout);
 
         }
 
@@ -80,50 +86,66 @@ public class SearchableActivity extends ListActivity implements LoaderManager.Lo
 
     private void fillData(Cursor c) {
     	Log.e(TAG, "entered fillData");
-        // Create an array to specify the fields we want to display in the list
-        String[] from = new String[]{DatabaseTable.COL_WINE, DatabaseTable.COL_DESCRIPTION};
-        Log.e(TAG, "after creating from");
 
-        // and an array of the text fields we want to bind those db fields to
-        int[] to = new int[]{R.id.text_name, R.id.text_descr};
-        Log.e(TAG, "after creating to");
+        // for testing only
+        ArrayList<String> items = new ArrayList<String>(); if(c.moveToFirst()){
+            do{
+                String itemName = c.getString(c.getColumnIndexOrThrow(DatabaseTable.COL_WINE));
+                String itemDescription = c.getString(c.getColumnIndexOrThrow(DatabaseTable.COL_DESCRIPTION));
+                items.add(itemName + " - " + itemDescription);
+            }while(c.moveToNext());
+        }
+        c.close();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_wine,items);
+        // Bind to our new adapter.
+        setListAdapter(adapter);
 
-        // Initialize the adapter. Note that we pass a 'null' Cursor as the
-        // third argument. We will pass the adapter a Cursor only when the
-        // data has finished loading for the first time (i.e. when the
-        // LoaderManager delivers the data to onLoadFinished). Also note
-        // that we have passed the '0' flag as the last argument. This
-        // prevents the adapter from registering a ContentObserver for the
-        // Cursor (the CursorLoader will do this for us!).
-        mAdapter = new SimpleCursorAdapter(this, R.layout.item_row,
-                null, from, to, 0);
 
-        Log.e(TAG, "after creating SimpleCursorAdapter");
 
-        // Associate the (now empty) adapter with the ListView.
-        setListAdapter(mAdapter);
-
-        // The Activity (which implements the LoaderCallbacks<Cursor>
-        // interface) is the callbacks object through which we will interact
-        // with the LoaderManager. The LoaderManager uses this object to
-        // instantiate the Loader and to notify the client when data is made
-        // available/unavailable.
-        mCallbacks = this;
-
-        // Initialize the Loader with id '1' and callbacks 'mCallbacks'.
-        // If the loader doesn't already exist, one is created. Otherwise,
-        // the already created Loader is reused. In either case, the
-        // LoaderManager will manage the Loader across the Activity/Fragment
-        // lifecycle, will receive any new loads once they have completed,
-        // and will report this new data back to the 'mCallbacks' object.
-        LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_ID, null, mCallbacks);
-
-//        listView = (ListView) findViewById(R.id.listView);
-//        Log.e(TAG, "after findViewById");
+//        // Create an array to specify the fields we want to display in the list
+//        String[] from = new String[]{DatabaseTable.COL_WINE, DatabaseTable.COL_DESCRIPTION};
+//        Log.e(TAG, "after creating from");
 //
-//        listView.setAdapter(items);
-//        Log.e(TAG, "after setAdapter");
+//        // and an array of the text fields we want to bind those db fields to
+//        int[] to = new int[]{R.id.text_name, R.id.text_descr};
+//        Log.e(TAG, "after creating to");
+//
+//        // Initialize the adapter. Note that we pass a 'null' Cursor as the
+//        // third argument. We will pass the adapter a Cursor only when the
+//        // data has finished loading for the first time (i.e. when the
+//        // LoaderManager delivers the data to onLoadFinished). Also note
+//        // that we have passed the '0' flag as the last argument. This
+//        // prevents the adapter from registering a ContentObserver for the
+//        // Cursor (the CursorLoader will do this for us!).
+//        mAdapter = new SimpleCursorAdapter(this, R.layout.item_row,
+//                null, from, to, 0);
+//
+//        Log.e(TAG, "after creating SimpleCursorAdapter");
+//
+//        // Associate the (now empty) adapter with the ListView.
+//        setListAdapter(mAdapter);
+//
+//        // The Activity (which implements the LoaderCallbacks<Cursor>
+//        // interface) is the callbacks object through which we will interact
+//        // with the LoaderManager. The LoaderManager uses this object to
+//        // instantiate the Loader and to notify the client when data is made
+//        // available/unavailable.
+//        mCallbacks = this;
+//
+//        // Initialize the Loader with id '1' and callbacks 'mCallbacks'.
+//        // If the loader doesn't already exist, one is created. Otherwise,
+//        // the already created Loader is reused. In either case, the
+//        // LoaderManager will manage the Loader across the Activity/Fragment
+//        // lifecycle, will receive any new loads once they have completed,
+//        // and will report this new data back to the 'mCallbacks' object.
+//        LoaderManager lm = getLoaderManager();
+//        lm.initLoader(LOADER_ID, null, mCallbacks);
+//
+////        listView = (ListView) findViewById(R.id.listView);
+////        Log.e(TAG, "after findViewById");
+////
+////        listView.setAdapter(items);
+////        Log.e(TAG, "after setAdapter");
 
 
         Log.e(TAG, "finished fillData");
