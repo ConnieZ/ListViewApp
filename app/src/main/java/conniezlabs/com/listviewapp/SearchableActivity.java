@@ -191,7 +191,6 @@ public class SearchableActivity extends ListActivity implements LoaderManager.Lo
         // R.id.search is pulled by id from options_menu.xml, where there could be other menu items.
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.search).getActionView();
-        // Adding this line causes the app to stop, needs more work (add real Activity)
         // The SearchView attempts to start an activity with the ACTION_SEARCH when a user submits a search query.
         // A searchable activity filters for the ACTION_SEARCH intent and searches for the query in some sort of data set.
         searchView.setSearchableInfo(
