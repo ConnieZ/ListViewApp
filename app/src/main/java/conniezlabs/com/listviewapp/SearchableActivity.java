@@ -88,16 +88,19 @@ public class SearchableActivity extends ListActivity implements LoaderManager.Lo
     	Log.e(TAG, "entered fillData");
 
         // for testing only
-        ArrayList<String> items = new ArrayList<String>(); if(c.moveToFirst()){
+        ArrayList<Entry> items = new ArrayList<Entry>(); if(c.moveToFirst()){
             do{
-                String itemName = c.getString(c.getColumnIndexOrThrow(DatabaseTable.COL_WINE));
-                String itemDescription = c.getString(c.getColumnIndexOrThrow(DatabaseTable.COL_DESCRIPTION));
-                items.add(itemName + " - " + itemDescription);
+                items.add(new Entry(c.getString(c.getColumnIndexOrThrow(DatabaseTable.COL_WINE)),
+                        c.getString(c.getColumnIndexOrThrow(DatabaseTable.COL_DESCRIPTION))));
             }while(c.moveToNext());
         }
         c.close();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_wine,items);
+
+        // this works
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_wine,items);
         // Bind to our new adapter.
+
+        EntryAdapter adapter = new EntryAdapter(SearchableActivity.this, items);
         setListAdapter(adapter);
 
 
