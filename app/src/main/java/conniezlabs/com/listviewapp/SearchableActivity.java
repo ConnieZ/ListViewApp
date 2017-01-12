@@ -42,6 +42,9 @@ public class SearchableActivity extends ListActivity implements LoaderManager.Lo
     // The adapter that binds our data to the ListView
     private SimpleCursorAdapter mAdapter;
 
+    // create the database manager object
+    DatabaseTable db = new DatabaseTable(this);
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "Started Searchable onCreate");
@@ -56,11 +59,11 @@ public class SearchableActivity extends ListActivity implements LoaderManager.Lo
 
     @Override
     protected void onNewIntent(Intent intent) {
+
         handleIntent(intent);
     }
 
-    // create the database manager object
-    DatabaseTable db = new DatabaseTable(this);
+
 
     // One of the methods for search functionality, this will handle the Search intent
     private void handleIntent(Intent intent) {
@@ -87,7 +90,6 @@ public class SearchableActivity extends ListActivity implements LoaderManager.Lo
     private void fillData(Cursor c) {
     	Log.e(TAG, "entered fillData");
 
-        // for testing only
         ArrayList<Entry> items = new ArrayList<Entry>(); if(c.moveToFirst()){
             do{
                 items.add(new Entry(c.getString(c.getColumnIndexOrThrow(DatabaseTable.COL_WINE)),

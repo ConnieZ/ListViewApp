@@ -1,5 +1,6 @@
 package conniezlabs.com.listviewapp;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,12 +14,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
         private static final String TAG = "MainActivity";
 
         static final String[] WHITE_WINES = new String[] { "Pinot Blanc", "Pinot Grigio", "Sauvignon Blanc",
                     "Chardonnay", "White Rioja", "Muscat Blanc", "Riesling","Tokaji" };
+
+        // create the database manager object
+        DatabaseTable db = new DatabaseTable(this);
+
         ListView listView;
 
 
@@ -33,8 +40,26 @@ public class MainActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
 
             setContentView(R.layout.activity_main);
-            //setListAdapter(new ArrayAdapter<String>(this, R.layout.list_wine,FRUITS));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_wine,WHITE_WINES);
+
+            //showing all wines from db
+            ArrayAdapter<String> adapter;
+
+            Cursor c = db.getAllItems();
+            ArrayList<String> items = new ArrayList<String>();
+            try {
+                if (c.moveToFirst()) {
+                    do {
+                        items.add(c.getString(c.getColumnIndexOrThrow(DatabaseTable.COL_WINE)));
+                    } while (c.moveToNext());
+                }
+                c.close();
+                adapter = new ArrayAdapter<String>(this, R.layout.list_wine,items);
+            } catch( RuntimeException e){
+
+            }finally {
+                adapter = new ArrayAdapter<String>(this, R.layout.list_wine,WHITE_WINES);
+            }
+
 
             // ListView listView = getListView();
 
