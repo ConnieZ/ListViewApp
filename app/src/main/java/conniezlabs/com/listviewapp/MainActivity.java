@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
                     "Chardonnay", "White Rioja", "Muscat Blanc", "Riesling","Tokaji" };
 
         // create the database manager object
-        DatabaseTable db = new DatabaseTable(this);
+        DatabaseTable maindb = new DatabaseTable(this);
 
         ListView listView;
 
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             //showing all wines from db
             ArrayAdapter<String> adapter;
 
-            Cursor c = db.getAllItems();
+            Cursor c = maindb.getAllItems();
             ArrayList<String> items = new ArrayList<String>();
             try {
                 if (c.moveToFirst()) {

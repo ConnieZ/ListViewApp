@@ -22,9 +22,6 @@ public class DatabaseTable {
     //The columns we'll include in the dictionary table
     public static final String COL_WINE = "WINE";
     public static final String COL_DESCRIPTION = "DESCRIPTION";
-    public static final String COL_LONGDESCRIPTION = "LONG_DESCRIPTION";
-    public static final String COL_SPECTRUMCOLOR = "SPECTRUM_COLOR";
-    public static final String COL_WINECOLOR = "WINE_COLOR";
 
     private static final String DATABASE_NAME = "WINEDATABASE";
     private static final String FTS_VIRTUAL_TABLE = "FTS";
@@ -46,7 +43,8 @@ public class DatabaseTable {
     }
 
     public Cursor getAllItems() {
-        return query(null, null, new String[] {COL_WINE});
+        Log.e(TAG, "inside getAllItems");
+        return query(null, null, null);
     }
 
     // this method is used by getItemMatches() and actually searches the database
@@ -76,10 +74,7 @@ public class DatabaseTable {
                 "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE +
                         " USING fts3 (" +
                         COL_WINE + ", " +
-                        COL_DESCRIPTION + ", " +
-                        COL_LONGDESCRIPTION + ", " +
-                        COL_SPECTRUMCOLOR + ", " +
-                        COL_WINECOLOR + ")";
+                        COL_DESCRIPTION + ")";
 
         DatabaseOpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -121,9 +116,9 @@ public class DatabaseTable {
             try {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    String[] strings = TextUtils.split(line, "|");
+                    String[] strings = TextUtils.split(line, "-");
                     if (strings.length < 2) continue;
-                    long id = addItems(strings);
+                    long id = addItem(strings);
                     if (id < 0) {
                         Log.e(TAG, "unable to add word: " + strings[0].trim());
                     }
@@ -133,13 +128,10 @@ public class DatabaseTable {
             }
         }
 
-        public long addItems(String[] strings) {
+        public long addItem(String[] strings) {
             ContentValues initialValues = new ContentValues();
-            initialValues.put(COL_WINE, strings[0]);
-            initialValues.put(COL_DESCRIPTION, strings[1]);
-            initialValues.put(COL_LONGDESCRIPTION, strings[2]);
-            initialValues.put(COL_SPECTRUMCOLOR, strings[3]);
-            initialValues.put(COL_WINECOLOR, strings[4]);
+            initialValues.put(COL_WINE, strings[0].trim());
+            initialValues.put(COL_DESCRIPTION, strings[1].trim());
 
             return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
         }
